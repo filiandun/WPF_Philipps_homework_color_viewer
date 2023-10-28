@@ -97,10 +97,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ColorViewerIcon.bmp" />
+    <Resource Include="Resources\a.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\colorviewericon.ico" />
+    <Resource Include="Resources\ColorViewerIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

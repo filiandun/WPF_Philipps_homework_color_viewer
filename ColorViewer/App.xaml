@@ -3,7 +3,109 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ColorViewer"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
          
+        <!-- RECTANGLE -->
+        <Style x:Key="RectangleStyle" TargetType="Rectangle">
+            <Setter Property="Margin" Value="0, 2, 0, 7"/>
+            <Setter Property="RadiusX" Value="6"/>
+            <Setter Property="RadiusY" Value="6"/>
+        </Style>
+
+        <Style x:Key="AlphaRectangleStyle" TargetType="Rectangle" BasedOn="{StaticResource RectangleStyle}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/Resources/a.bmp" Stretch="Uniform"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RedRectangleStyle" TargetType="Rectangle" BasedOn="{StaticResource RectangleStyle}">
+            <Setter Property="Fill" Value="IndianRed"/>
+        </Style>
+
+        <Style x:Key="GreenRectangleStyle" TargetType="Rectangle" BasedOn="{StaticResource RectangleStyle}">
+            <Setter Property="Fill" Value="LawnGreen"/>
+        </Style>
+
+        <Style x:Key="BlueRectangleStyle" TargetType="Rectangle" BasedOn="{StaticResource RectangleStyle}">
+            <Setter Property="Fill" Value="CornflowerBlue"/>
+        </Style>
+
+        
+        <!-- LITSBOX -->
+        <Style x:Key="ListBoxStyle" TargetType="ListBox">
+            <Setter Property="Margin" Value="10, 5, 10, 0"/>
+            
+            <Setter Property="BorderBrush" Value="#FFAFCEFF"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        
+        <!-- CHECKBOX -->
+        <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="IsChecked" Value="True"/>
+            <Setter Property="Margin" Value="5, 8"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="3"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+
+        <!-- SLIDER -->
+        <Style x:Key="SliderStyle" TargetType="Slider">
+            <Setter Property="Margin" Value="0, 8, 0, 0"/>
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="255"/>
+        </Style>
+
+        
+        <!-- TEXTBOX -->
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Margin" Value="5, 6, 5, 11"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="6"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+
+        <!-- BUTTON -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="AddButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Content" Value="Добавить"/>
+            <Setter Property="Foreground" Value="LawnGreen"/>
+            <Setter Property="BorderBrush" Value="LawnGreen"/>
+        </Style>
+
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Content" Value="Удалить"/>
+            <Setter Property="Foreground" Value="IndianRed"/>
+            <Setter Property="BorderBrush" Value="IndianRed"/>
+        </Style>
+        
     </Application.Resources>
 </Application>

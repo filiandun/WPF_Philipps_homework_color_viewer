@@ -5,9 +5,6 @@ using System.Windows.Media;
 
 namespace ColorViewer
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private NewColor newColor;
@@ -23,206 +20,147 @@ namespace ColorViewer
             this.gTextBox.Text = this.newColor.G.ToString();
             this.bTextBox.Text = this.newColor.B.ToString();
 
-            this.aTrackBar.Value = this.newColor.A;
-            this.rTrackBar.Value = this.newColor.R;
-            this.gTrackBar.Value = this.newColor.G;
-            this.bTrackBar.Value = this.newColor.B;
-
-            this.aCheckBox.IsChecked = true;
-            this.rCheckBox.IsChecked = true;
-            this.gCheckBox.IsChecked = true;
-            this.bCheckBox.IsChecked = true;
+            this.aSlider.Value = this.newColor.A;
+            this.rSlider.Value = this.newColor.R;
+            this.gSlider.Value = this.newColor.G;
+            this.bSlider.Value = this.newColor.B;
         }
 
 
-        private void aTrackBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            this.newColor.A = (byte)this.aTrackBar.Value;
-            this.aTextBox.Text = $"{(byte) this.aTrackBar.Value}";
-            
-            this.UpdateColorRectangle();
+            if (sender is Slider slider)
+            {  
+                switch (slider.Name)
+                {
+                    case "aSlider": 
+                        this.newColor.A = (byte) this.aSlider.Value;
+                        this.aTextBox.Text = $"{(byte) this.aSlider.Value}";
+                        break;
+
+                    case "rSlider":
+                        this.newColor.R = (byte) this.rSlider.Value;
+                        this.rTextBox.Text = $"{(byte) this.rSlider.Value}";
+                        break;
+
+                    case "gSlider":
+                        this.newColor.G = (byte) this.gSlider.Value;
+                        this.gTextBox.Text = $"{(byte) this.gSlider.Value}";
+                        break;
+
+                    case "bSlider":
+                        this.newColor.B = (byte) this.bSlider.Value;
+                        this.bTextBox.Text = $"{(byte) this.bSlider.Value}";
+                        break;
+                }
+
+                this.UpdateColorRectangle();
+            }
         }
 
-        private void rTrackBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.newColor.R = (byte) this.rTrackBar.Value;
-            this.rTextBox.Text = $"{(byte)this.rTrackBar.Value}";
+            if (sender is TextBox textBox)
+            {
+                switch (textBox.Name)
+                {
+                    case "aTextBox":
+                        this.UpdateForTextBox(ref this.aTextBox, 0, ref this.aSlider);
+                        break;
 
-            this.UpdateColorRectangle();
+                    case "rTextBox":
+                        this.UpdateForTextBox(ref this.rTextBox, 1, ref this.rSlider);
+                        break;
+
+                    case "gTextBox":
+                        this.UpdateForTextBox(ref this.gTextBox, 2, ref this.gSlider);
+                        break;
+
+                    case "bTextBox":
+                        this.UpdateForTextBox(ref this.bTextBox, 3, ref this.bSlider);
+                        break;
+                }
+            }
         }
 
-        private void gTrackBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            this.newColor.G = (byte) this.gTrackBar.Value;
-            this.gTextBox.Text = $"{(byte)this.gTrackBar.Value}";
+            if (sender is CheckBox checkBox)
+            {
+                switch (checkBox.Name)
+                {
+                    case "aCheckBox":
+                        this.UpdateForCheckBox(ref this.aCheckBox, ref this.aTextBox, ref this.aSlider);
+                        break;
 
-            this.UpdateColorRectangle();
+                    case "rCheckBox":
+                        this.UpdateForCheckBox(ref this.rCheckBox, ref this.rTextBox, ref this.rSlider);
+                        break;
+
+                    case "gCheckBox":
+                        this.UpdateForCheckBox(ref this.gCheckBox, ref this.gTextBox, ref this.gSlider);
+                        break;
+
+                    case "bCheckBox":
+                        this.UpdateForCheckBox(ref this.bCheckBox, ref this.bTextBox, ref this.bSlider);
+                        break;
+                }
+            }
         }
 
-        private void bTrackBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.newColor.B = (byte) this.bTrackBar.Value;
-            this.bTextBox.Text = $"{(byte)this.bTrackBar.Value}";
-
-            this.UpdateColorRectangle();
-        }
+        
 
         private void UpdateColorRectangle()
         {
             this.colorRectangle.Fill = this.newColor.GetColor();
         }
 
-        private void aTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void UpdateForTextBox(ref TextBox textBox, byte index, ref Slider slider)
         {
-            if (int.TryParse(this.aTextBox.Text, out int num))
+            if (int.TryParse(textBox.Text, out int num))
             {
                 if (num > 255)
                 {
                     num = 255;
-                    this.aTextBox.Text = num.ToString();
+                    textBox.Text = num.ToString();
                 }
-                this.newColor.A = (byte) num;
-                this.aTrackBar.Value = num;
+                textBox.SelectionStart = textBox.Text.Length;
+                this.newColor[index] = (byte) num;
+                slider.Value = num;
             }
             else
             {
-                this.newColor.A = 0;
-                this.aTrackBar.Value = 0;
-                this.aTextBox.Text = "0";
+                textBox.Text = "0";
+                textBox.SelectionStart = textBox.Text.Length;
+                this.newColor[index] = 0;
+                slider.Value = 0;
             }
         }
 
-        private void rTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void UpdateForCheckBox(ref CheckBox checkBox, ref TextBox textBox, ref Slider slider)
         {
-            if (int.TryParse(this.rTextBox.Text, out int num))
+            if (checkBox.IsChecked.Value)
             {
-                if (num > 255)
-                {
-                    num = 255;
-                    this.rTextBox.Text = num.ToString();
-                }
-                this.newColor.R = (byte) num;
-                this.rTrackBar.Value = num;
+                textBox.IsEnabled = true;
+                slider.IsEnabled = true;
             }
             else
             {
-                this.newColor.R = 0;
-                this.rTrackBar.Value = 0;
-                this.rTextBox.Text = "0";
+                textBox.IsEnabled = false;
+                slider.IsEnabled = false;
             }
         }
 
-        private void gTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (int.TryParse(this.gTextBox.Text, out int num))
-            {
-                if (num > 255)
-                {
-                    num = 255;
-                    this.gTextBox.Text = num.ToString();
-                }
-                this.newColor.G = (byte) num;
-                this.gTrackBar.Value = num;
-            }
-            else
-            {
-                this.newColor.G = 0;
-                this.gTrackBar.Value = 0;
-                this.gTextBox.Text = "0";
-            }
-        }
 
-        private void bTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (int.TryParse(this.bTextBox.Text, out int num))
-            {
-                if (num > 255)
-                {
-                    num = 255;
-                    this.bTextBox.Text = num.ToString();
-                }
-                this.newColor.B = (byte) num;
-                this.bTrackBar.Value = num;
-            }
-            else
-            {
-                this.newColor.B = 0;
-                this.bTrackBar.Value = 0;
-                this.bTextBox.Text = "0";
-            }
-        }
 
-        private void aCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.aCheckBox.IsChecked.Value)
-            {
-                this.aTextBox.IsEnabled = true;
-                this.aTrackBar.IsEnabled = true;
-            }
-            else
-            {
-                this.aTextBox.IsEnabled = false;
-                this.aTrackBar.IsEnabled = false;
-            }
-        }
-
-        private void rCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.rCheckBox.IsChecked.Value)
-            {
-                this.rTextBox.IsEnabled = true;
-                this.rTrackBar.IsEnabled = true;
-            }
-            else
-            {
-                this.rTextBox.IsEnabled = false;
-                this.rTrackBar.IsEnabled = false;
-            }
-        }
-
-        private void gCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.gCheckBox.IsChecked.Value)
-            {
-                this.gTextBox.IsEnabled = true;
-                this.gTrackBar.IsEnabled = true;
-            }
-            else
-            {
-                this.gTextBox.IsEnabled = false;
-                this.gTrackBar.IsEnabled = false;
-            }
-        }
-
-        private void bCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.bCheckBox.IsChecked.Value)
-            {
-                this.bTextBox.IsEnabled = true;
-                this.bTrackBar.IsEnabled = true;
-            }
-            else
-            {
-                this.bTextBox.IsEnabled = false;
-                this.bTrackBar.IsEnabled = false;
-            }
-        }
-
-        private void addButton_Click(object sender, RoutedEventArgs e)
+        private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             Grid grid = new Grid
             {
                 Width = 220,
                 Height = 26
             };
-
-            ColumnDefinition columnDefinition1 = new ColumnDefinition();
-            ColumnDefinition columnDefinition2 = new ColumnDefinition();
-            ColumnDefinition columnDefinition3 = new ColumnDefinition();
-
-            grid.ColumnDefinitions.Add(columnDefinition1);
-            grid.ColumnDefinitions.Add(columnDefinition2);
-            grid.ColumnDefinitions.Add(columnDefinition3);
 
             Label label = new Label
             {
@@ -242,6 +180,14 @@ namespace ColorViewer
                 StrokeThickness = 2,
             };
 
+            ColumnDefinition columnDefinition1 = new ColumnDefinition();
+            ColumnDefinition columnDefinition2 = new ColumnDefinition();
+            ColumnDefinition columnDefinition3 = new ColumnDefinition();
+
+            grid.ColumnDefinitions.Add(columnDefinition1);
+            grid.ColumnDefinitions.Add(columnDefinition2);
+            grid.ColumnDefinitions.Add(columnDefinition3);
+
             Grid.SetColumn(label, 0);
             Grid.SetColumn(rectangle, 1);
 
@@ -253,7 +199,7 @@ namespace ColorViewer
             this.colorsListBox.Items.Add(grid);
         }
 
-        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.colorsListBox.SelectedIndex != -1)
             {
