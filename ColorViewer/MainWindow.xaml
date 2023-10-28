@@ -5,36 +5,155 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ColorViewer"
         mc:Ignorable="d"
-        Title="ColorViewer" Height="450" Width="800" RenderTransformOrigin="0,0">
+        Title="ColorViewer" Height="500" Width="850" RenderTransformOrigin="0,0" Background="White">
 
     <Window.Resources>
-        <Style x:Key="ListTextBoxStyle" TargetType="ListBoxItem">
+        <Style x:Key="ListBoxStyle" TargetType="ListBox">
             <Style.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10" />
                 </Style>
             </Style.Resources>
         </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="6"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="3"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="ThumbStyle" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="false"/>
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Ellipse  Stroke="Black"
+                          StrokeThickness="1"
+                          Name="Ellipse" 
+                          Fill="OrangeRed" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Ellipse" Property="Fill" Value="Orange"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Ellipse" Property="Fill" Value="Gray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderStyle" TargetType="Slider">
+            <Setter Property="BorderThickness" Value="2"/>
+
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" Name="row" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" Name="column" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Name="PART_Border"
+                           BorderBrush="Black" BorderThickness="1"
+                           Padding="2"
+                          Grid.Row="1" Grid.Column="1"
+                           Width="{TemplateBinding Width}"
+                           Height="{TemplateBinding Height}"
+                           Background="GreenYellow"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center" />
+                            <Track Name="PART_Track"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Center"
+                              Grid.Row="1" Grid.Column="1"
+                              Width="{TemplateBinding Width}"
+                              Height="{TemplateBinding Height}">
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ThumbStyle}" />
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    
+
     <Grid>
-        <Rectangle Margin="10, 5, 10, 5" Fill="GhostWhite"/>
-        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBoxItem x:Name="colorsListBoxItem" Grid.Row="0" Grid.Column="1" Margin="20, 10, 20, 17" BorderBrush="Black" Style="{StaticResource ListTextBoxStyle}"/>
+            <Rectangle Margin="10, 5, 10, 10" Fill="White" Stroke="#FFAFCEFF" RadiusX="10" RadiusY="10" StrokeThickness="2"/>
 
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ListBox x:Name="colorsListBox" Grid.Row="0" Margin="10, 5, 10, 0" BorderBrush="#FFAFCEFF" Style="{StaticResource ListBoxStyle}" Background="White" BorderThickness="2">
+                    <ListBoxItem>
+                        <Grid Width="220">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Content="#FFE2A5C9" FontFamily="Segoe UI Variable Display Semibold" Foreground="#FFAFCEFF"/>
+                            <Rectangle Grid.Column="1" Margin="5" Fill="#FF9AB9FE" Stroke="#FFAFCEFF" RadiusX="5" RadiusY="5" StrokeThickness="2"/>
+                        </Grid>
+                    </ListBoxItem>
+                </ListBox>
+
+                <UniformGrid Grid.Row="1" Rows="1" Columns="2">
+                    <Button x:Name="addButton" Margin="10, 10" Content="Добавить" FontFamily="Segoe UI Variable Display Semibold" Background="White" Foreground="LawnGreen" BorderBrush="LawnGreen" Style="{StaticResource ButtonStyle}" Click="addButton_Click"/>
+                    <Button x:Name="deleteButton" Margin="10, 10" Content="Удалить" FontFamily="Segoe UI Variable Display Semibold" Background="White" Foreground="IndianRed" BorderBrush="IndianRed" Style="{StaticResource ButtonStyle}" Click="deleteButton_Click"/>
+                </UniformGrid>
+            </Grid>
+            
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Rectangle x:Name="colorRectangle" Grid.Row="0" Grid.Column="0" Margin="20, 10, 20, 20"  Fill="#FFE2A5C9" RadiusX="10" RadiusY="10"/>
+                <Rectangle x:Name="colorRectangle" Grid.Row="0" Grid.Column="0" Margin="20, 10, 20, 20"  Fill="#FF9AB9FE" RadiusX="10" RadiusY="10"/>
 
                 <Grid Grid.Row="1" Grid.Column="0" Margin="20, 0, 20, 10">
                     <Grid.RowDefinitions>
@@ -56,9 +175,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton x:Name="aCheckBox" Grid.Row="0" Grid.Column="0" Margin="5, 7, 5, 10"/>
-                        <Slider x:Name="aTrackBar" Grid.Row="0" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="trackBar_ValueChanged"/>
-                        <TextBox x:Name="aTextBlock" Grid.Row="0" Grid.Column="2" Margin="5, 5, 5, 12"/>
+                        <CheckBox x:Name="aCheckBox" Grid.Row="0" Grid.Column="0" Margin="5, 7, 5, 10" Click="aCheckBox_Click" Style="{StaticResource CheckBoxStyle}"/>
+                        <Slider x:Name="aTrackBar" Grid.Row="0" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="aTrackBar_ValueChanged" SmallChange="1"/>
+                        <TextBox x:Name="aTextBox" Grid.Row="0" Grid.Column="2" Margin="5, 5, 5, 12" TextChanged="aTextBox_TextChanged" Style="{StaticResource TextBoxStyle}"/>
                     </Grid>
 
                     <Grid Grid.Row="1" >
@@ -68,9 +187,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton x:Name="rCheckBox" Grid.Row="1" Grid.Column="0" Margin="5, 7, 5, 10" BorderBrush="{x:Null}"/>
-                        <Slider x:Name="rTrackBar" Grid.Row="1" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="trackBar_ValueChanged"/>
-                        <TextBox x:Name="rTextBlock" Grid.Row="1" Grid.Column="2" Margin="5, 5, 5, 12" BorderBrush="{x:Null}"/>
+                        <CheckBox x:Name="rCheckBox" Grid.Row="1" Grid.Column="0" Margin="5, 7, 5, 10" Click="rCheckBox_Click" Style="{StaticResource CheckBoxStyle}"/>
+                        <Slider x:Name="rTrackBar" Grid.Row="1" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="rTrackBar_ValueChanged"/>
+                        <TextBox x:Name="rTextBox" Grid.Row="1" Grid.Column="2" Margin="5, 5, 5, 12"  TextChanged="rTextBox_TextChanged" Style="{StaticResource TextBoxStyle}"/>
                     </Grid>
 
                     <Grid Grid.Row="2" >
@@ -80,9 +199,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton x:Name="gCheckBox" Grid.Row="2" Grid.Column="0" Margin="5, 7, 5, 10"/>
-                        <Slider x:Name="gTrackBar" Grid.Row="2" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="trackBar_ValueChanged"/>
-                        <TextBox x:Name="gTextBlock" Grid.Row="2" Grid.Column="2" Margin="5, 5, 5, 12"/>
+                        <CheckBox x:Name="gCheckBox" Grid.Row="2" Grid.Column="0" Margin="5, 7, 5, 10" Click="gCheckBox_Click" Style="{StaticResource CheckBoxStyle}"/>
+                        <Slider x:Name="gTrackBar" Grid.Row="2" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="gTrackBar_ValueChanged"/>
+                        <TextBox x:Name="gTextBox" Grid.Row="2" Grid.Column="2" Margin="5, 5, 5, 12" TextChanged="gTextBox_TextChanged" Style="{StaticResource TextBoxStyle}"/>
                     </Grid>
 
                     <Grid Grid.Row="3" >
@@ -92,9 +211,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton x:Name="bCheckBox" Grid.Row="3" Grid.Column="0" Margin="5, 7, 5, 10"/>
-                        <Slider x:Name="bTrackBar" Grid.Row="3" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="trackBar_ValueChanged"/>
-                        <TextBox x:Name="bTextBlock" Grid.Row="3" Grid.Column="2" Margin="5, 5, 5, 12"/>
+                        <CheckBox x:Name="bCheckBox" Grid.Row="3" Grid.Column="0" Margin="5, 7, 5, 10" Click="bCheckBox_Click" Style="{StaticResource CheckBoxStyle}"/>
+                        <Slider x:Name="bTrackBar" Grid.Row="3" Grid.Column="1" Margin="5, 5, 0, 0" Minimum="0" Maximum="255" ValueChanged="bTrackBar_ValueChanged" Style="{StaticResource SliderStyle}"/>
+                        <TextBox x:Name="bTextBox" Grid.Row="3" Grid.Column="2" Margin="5, 5, 5, 12" TextChanged="bTextBox_TextChanged" Style="{StaticResource TextBoxStyle}"/>
                     </Grid>
                 </Grid>
             </Grid>
